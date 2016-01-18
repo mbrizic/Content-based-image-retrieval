@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -20,7 +21,7 @@ namespace CBIR
         private void MainForm_Load(object sender, EventArgs e)
         {
             images = OpenImagesFromFolder(@"C:\CBIR-test");
-            GeneratePictureBoxRow();
+            GeneratePictureBoxRowForImages(images, panel);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -32,8 +33,13 @@ namespace CBIR
 
             pictureBox1.Image = image.Bitmap;
 
-            var similarImage = cv.FindSimilarImage(image, images);
-            pictureBox2.Image = similarImage.Bitmap;
+            var similarImages = cv.FindSimilarImages(image, images);
+            var firstSimilarImage = similarImages.First();
+
+            pictureBox2.Image = firstSimilarImage.Image.Bitmap;
+            similarityLabel.Text = "Sličnost: " + firstSimilarImage.GetSimilarityAsString();
+
+            GeneratePictureBoxRowForImages(similarImages, resultsPanel);
         }
 
         private List<Image> OpenImagesFromFolder(string path = null)
@@ -59,28 +65,53 @@ namespace CBIR
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
-                dlg.Title = "Open Image";
+                dlg.Title = "Otvori sliku po kojoj želiš pretraživati: ";
 
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    return new Image(dlg.FileName);
-                }
-                else
-                {
-                    return null;
-                }
+                return (dlg.ShowDialog() == DialogResult.OK) 
+                    ? new Image(dlg.FileName)
+                    : null;
             }
         }
 
-        private void GeneratePictureBoxRow()
+        private void GeneratePictureBoxRowForImages(List<Image> images, FlowLayoutPanel container)
         {
+            container.Controls.Clear();
+
             images.ForEach(i =>
             {
-                panel.Controls.Add(new PictureBox
+                container.Controls.Add(new PictureBox
                 {
                     SizeMode = PictureBoxSizeMode.StretchImage,
-                    Size = new Size(62, 62),
+                    Size = new Size(60, 60),
                     Image = i.Bitmap
+                });
+            });
+        }
+
+        private void GeneratePictureBoxRowForImages(List<WeightedImage> images, FlowLayoutPanel container)
+        {
+            container.Controls.Clear();
+
+            images.ForEach(i =>
+            {
+                container.Controls.Add(new FlowLayoutPanel
+                {
+                    FlowDirection = FlowDirection.TopDown,
+                    Size = new Size(60, 100),
+                    Controls = {
+                        new PictureBox
+                        {
+                            SizeMode = PictureBoxSizeMode.StretchImage,
+                            Size = new Size(60, 60),
+                            Image = i.Image.Bitmap
+                        },
+                        new Label
+                        {
+                            Text = i.GetSimilarityAsString(),
+                            Size = new Size(60, 20),
+                            TextAlign = ContentAlignment.MiddleCenter
+                        }
+                    }
                 });
             });
         }
