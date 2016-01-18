@@ -8,9 +8,14 @@ namespace CBIR
         public Image Image;
         public double Similarity;
 
-        public string GetSimilarityAsString(int numberOfDecimals = 5)
+        public string GetSimilarityAsPercentString(int numberOfDecimals = 5)
         {
-            return this.Similarity.ToString(CultureInfo.CurrentCulture).Substring(0, numberOfDecimals);
+            return GetSimilarityAsPercent().ToString() + "%";
+        }
+
+        public int GetSimilarityAsPercent()
+        {
+            return (int) (this.Similarity * 100);
         }
     }
 }

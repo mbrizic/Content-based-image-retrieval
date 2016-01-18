@@ -13,11 +13,11 @@ namespace CBIR
         public Image(Bitmap bitmap)
             : base(bitmap)
         {
-            this.Channels  = this.Split();
+            this.Channels = this.Split();
             this.Histogram = GetBgrHistogram();
         }
 
-        public Image(string imageUrl) 
+        public Image(string imageUrl)
             : this(new Bitmap(imageUrl)) {}
 
         private DenseHistogram GetBgrHistogram()

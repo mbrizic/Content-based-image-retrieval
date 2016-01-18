@@ -11,17 +11,20 @@ namespace CBIR
     public partial class MainForm : Form
     {
         private CV cv;
-        private List<Image> images; 
+        private List<Image> images;
+        private string path;
         public MainForm()
         {
             InitializeComponent();
             cv = new CV();
+            path = @"C:\CBIR-test";
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            images = OpenImagesFromFolder(@"C:\CBIR-test");
+            images = OpenImagesFromFolder(path);
             GeneratePictureBoxRowForImages(images, panel);
+            pathLabel.Text = path;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,9 +40,17 @@ namespace CBIR
             var firstSimilarImage = similarImages.First();
 
             pictureBox2.Image = firstSimilarImage.Image.Bitmap;
-            similarityLabel.Text = "Sličnost: " + firstSimilarImage.GetSimilarityAsString();
+
+            similarityLabel.Text = firstSimilarImage.GetSimilarityAsPercentString();
+            similarityProgressBar.Value = firstSimilarImage.GetSimilarityAsPercent();
 
             GeneratePictureBoxRowForImages(similarImages, resultsPanel);
+        }
+
+        private void changeFolderButton_Click(object sender, EventArgs e)
+        {
+            images = OpenImagesFromFolder();
+            pathLabel.Text = path;
         }
 
         private List<Image> OpenImagesFromFolder(string path = null)
@@ -50,6 +61,7 @@ namespace CBIR
             {
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
                 DialogResult result = fbd.ShowDialog();
+                this.path = fbd.SelectedPath;
                 files = Directory.GetFiles(fbd.SelectedPath).ToList();
             }
             else
@@ -97,7 +109,7 @@ namespace CBIR
                 container.Controls.Add(new FlowLayoutPanel
                 {
                     FlowDirection = FlowDirection.TopDown,
-                    Size = new Size(60, 100),
+                    Size = new Size(60, 120),
                     Controls = {
                         new PictureBox
                         {
@@ -105,9 +117,14 @@ namespace CBIR
                             Size = new Size(60, 60),
                             Image = i.Image.Bitmap
                         },
+                        new ProgressBar
+                        {
+                          Size = new Size(60, 20),
+                          Value = i.GetSimilarityAsPercent()
+                        },
                         new Label
                         {
-                            Text = i.GetSimilarityAsString(),
+                            Text = i.GetSimilarityAsPercentString(),
                             Size = new Size(60, 20),
                             TextAlign = ContentAlignment.MiddleCenter
                         }

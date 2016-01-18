@@ -33,6 +33,9 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel = new System.Windows.Forms.FlowLayoutPanel();
             this.resultsPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.pathLabel = new System.Windows.Forms.Label();
+            this.changeFolderButton = new System.Windows.Forms.Button();
+            this.similarityProgressBar = new System.Windows.Forms.ProgressBar();
             this.similarityLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -40,63 +43,92 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 3);
+            this.button1.Location = new System.Drawing.Point(12, 35);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(129, 30);
+            this.button1.Size = new System.Drawing.Size(119, 24);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Pretraga";
+            this.button1.Text = "Pretraži";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 71);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 87);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(315, 294);
+            this.pictureBox1.Size = new System.Drawing.Size(271, 230);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(333, 71);
+            this.pictureBox2.Location = new System.Drawing.Point(289, 87);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(343, 294);
+            this.pictureBox2.Size = new System.Drawing.Size(308, 230);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
             // 
             // panel
             // 
-            this.panel.Location = new System.Drawing.Point(148, 3);
+            this.panel.Location = new System.Drawing.Point(137, 6);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(528, 62);
+            this.panel.Size = new System.Drawing.Size(460, 62);
             this.panel.TabIndex = 3;
             // 
             // resultsPanel
             // 
-            this.resultsPanel.Location = new System.Drawing.Point(12, 371);
+            this.resultsPanel.Location = new System.Drawing.Point(12, 323);
             this.resultsPanel.Name = "resultsPanel";
-            this.resultsPanel.Size = new System.Drawing.Size(664, 99);
+            this.resultsPanel.Size = new System.Drawing.Size(585, 139);
             this.resultsPanel.TabIndex = 4;
+            // 
+            // pathLabel
+            // 
+            this.pathLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pathLabel.AutoSize = true;
+            this.pathLabel.Location = new System.Drawing.Point(171, 71);
+            this.pathLabel.Name = "pathLabel";
+            this.pathLabel.Size = new System.Drawing.Size(28, 13);
+            this.pathLabel.TabIndex = 7;
+            this.pathLabel.Text = "path";
+            // 
+            // changeFolderButton
+            // 
+            this.changeFolderButton.Location = new System.Drawing.Point(12, 6);
+            this.changeFolderButton.Name = "changeFolderButton";
+            this.changeFolderButton.Size = new System.Drawing.Size(119, 23);
+            this.changeFolderButton.TabIndex = 8;
+            this.changeFolderButton.Text = "Promijeni folder";
+            this.changeFolderButton.UseVisualStyleBackColor = true;
+            this.changeFolderButton.Click += new System.EventHandler(this.changeFolderButton_Click);
+            // 
+            // similarityProgressBar
+            // 
+            this.similarityProgressBar.Location = new System.Drawing.Point(12, 61);
+            this.similarityProgressBar.Name = "similarityProgressBar";
+            this.similarityProgressBar.Size = new System.Drawing.Size(87, 23);
+            this.similarityProgressBar.TabIndex = 9;
             // 
             // similarityLabel
             // 
-            this.similarityLabel.AutoSize = true;
             this.similarityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.similarityLabel.Location = new System.Drawing.Point(13, 40);
+            this.similarityLabel.Location = new System.Drawing.Point(105, 61);
             this.similarityLabel.Name = "similarityLabel";
-            this.similarityLabel.Size = new System.Drawing.Size(29, 16);
-            this.similarityLabel.TabIndex = 5;
-            this.similarityLabel.Text = "555";
+            this.similarityLabel.Size = new System.Drawing.Size(41, 23);
+            this.similarityLabel.TabIndex = 10;
+            this.similarityLabel.Text = "99%";
             this.similarityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 471);
+            this.ClientSize = new System.Drawing.Size(618, 471);
             this.Controls.Add(this.similarityLabel);
+            this.Controls.Add(this.similarityProgressBar);
+            this.Controls.Add(this.changeFolderButton);
+            this.Controls.Add(this.pathLabel);
             this.Controls.Add(this.resultsPanel);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.pictureBox2);
@@ -119,6 +151,9 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.FlowLayoutPanel panel;
         private System.Windows.Forms.FlowLayoutPanel resultsPanel;
+        private System.Windows.Forms.Label pathLabel;
+        private System.Windows.Forms.Button changeFolderButton;
+        private System.Windows.Forms.ProgressBar similarityProgressBar;
         private System.Windows.Forms.Label similarityLabel;
     }
 }
