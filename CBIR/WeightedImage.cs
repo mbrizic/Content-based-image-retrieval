@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-
-namespace CBIR
+﻿namespace CBIR
 {
     public class WeightedImage
     {

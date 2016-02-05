@@ -22,11 +22,11 @@ namespace CBIR
 
         private DenseHistogram GetBgrHistogram()
         {
-            var size = 256;
+            var binSize = 256;
             var range = new RangeF(0, 256);
 
             var hist = new DenseHistogram(
-                new[] { size, size, size },
+                new[] { binSize, binSize, binSize },
                 new[] { range, range, range });
 
             hist.Calculate(Channels, false, null);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,32 +16,37 @@ namespace CBIR
         {
             InitializeComponent();
             cv = new CV();
-            path = @"C:\CBIR-test";
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            images = OpenImagesFromFolder(path);
+            images = path != null ?
+                OpenImagesFromFolder(path) : 
+                OpenImagesFromFolder();
+
+            pathLabel.Text = "Path: " + path;
+            similarityProgressBar.Value = 0;
+            similarityLabel.Text = "";
+
             GeneratePictureBoxRowForImages(images, panel);
-            pathLabel.Text = path;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
             var image = OpenImage();
             
             if (image == null)
                 return;
 
-            pictureBox1.Image = image.Bitmap;
+            queryImagePictureBox.Image = image.Bitmap;
 
             var similarImages = cv.FindSimilarImages(image, images);
-            var firstSimilarImage = similarImages.First();
+            var mostSimilarImage = similarImages.First();
 
-            pictureBox2.Image = firstSimilarImage.Image.Bitmap;
+            mostSimilarImagePictureBox.Image = mostSimilarImage.Image.Bitmap;
 
-            similarityLabel.Text = firstSimilarImage.GetSimilarityAsPercentString();
-            similarityProgressBar.Value = firstSimilarImage.GetSimilarityAsPercent();
+            similarityLabel.Text = mostSimilarImage.GetSimilarityAsPercentString();
+            similarityProgressBar.Value = mostSimilarImage.GetSimilarityAsPercent();
 
             GeneratePictureBoxRowForImages(similarImages, resultsPanel);
         }
@@ -50,7 +54,8 @@ namespace CBIR
         private void changeFolderButton_Click(object sender, EventArgs e)
         {
             images = OpenImagesFromFolder();
-            pathLabel.Text = path;
+            GeneratePictureBoxRowForImages(images, panel);
+            pathLabel.Text = "Path: " + path;
         }
 
         private List<Image> OpenImagesFromFolder(string path = null)
@@ -60,6 +65,7 @@ namespace CBIR
             if (path == null)
             {
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
+                fbd.Description = "Choose images folder you want to perform search on: ";
                 DialogResult result = fbd.ShowDialog();
                 this.path = fbd.SelectedPath;
                 files = Directory.GetFiles(fbd.SelectedPath).ToList();
@@ -77,7 +83,7 @@ namespace CBIR
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
-                dlg.Title = "Otvori sliku po kojoj želiš pretraživati: ";
+                dlg.Title = "Choose query image: ";
 
                 return (dlg.ShowDialog() == DialogResult.OK) 
                     ? new Image(dlg.FileName)

@@ -16,7 +16,7 @@ namespace CBIR
                 Image = image,
                 Similarity = GetImageSimilarity(query, image)
             })
-            .OrderByDescending(i => i.Similarity)
+            .OrderByDescending(i => i.Similarity) 
             .Where(i => i.Similarity > SimilarityLimit)
             .ToList();
         }
